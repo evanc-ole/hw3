@@ -114,7 +114,7 @@ void Heap<T,PComparator>::pop()
   bool end = true;
 //trickle down
   int i = 0;
-  while(m_*i + m_ < size()){
+  while(m_*i + m_ < static_cast<int>(size())){
     int best = i;
     for(int j = 1; j <= m_; j++){
       if(!c_(arr_[best], arr_[i*m_ + j])){
