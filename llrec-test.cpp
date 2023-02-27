@@ -2,6 +2,7 @@
 #include <fstream>
 #include <functional>
 #include "llrec.h"
+#include "heap.h"
 using namespace std;
 
 /**
@@ -67,7 +68,11 @@ void dealloc(Node* head)
 //   function object struct declarations
 // -----------------------------------------------
 
-
+struct oddfunc {
+    bool operator() (int num1, int num2){
+        return num1 < num2;
+    }
+};
 
 
 
@@ -84,9 +89,32 @@ int main(int argc, char* argv[])
     Node* head = readList(argv[1]);
     cout << "Original list: ";
     print(head);
-
+    oddfunc f;
     // Test out your linked list code
+    Heap<int, oddfunc> h(2, f);
+    while(head){
+        h.push(head->val);
+        head = head->next;
+    }
+    
 
+    while(!h.empty()){
+        //cout << h.top() << " ";
+        int m = 0;
+        int n = 1;
+        for(int i = 0; i < h.arr_.size(); i++){
+            if(i == m){
+                cout << h.arr_[i] << endl;
+                m += n*2;
+                n *= 2;
+            }
+            else{
+                cout << h.arr_[i] << " ";
+            }
+        }
+        cout << endl;
+        h.pop();
+    }
 
 
     

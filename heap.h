@@ -2,7 +2,10 @@
 #define HEAP_H
 #include <functional>
 #include <stdexcept>
+#include <vector>
+#include <iostream>
 
+using namespace std;
 template <typename T, typename PComparator = std::less<T> >
 class Heap
 {
@@ -21,7 +24,7 @@ public:
   * @brief Destroy the Heap object
   * 
   */
-  ~Heap();
+  //~Heap();
 
   /**
    * @brief Push an item to the heap
@@ -58,16 +61,22 @@ public:
    * 
    */
   size_t size() const;
-
+std::vector<T> arr_;
 private:
   /// Add whatever helper functions and data members you need below
-
-
+  
+  int m_;
+  PComparator c_;
 
 
 };
 
 // Add implementation of member functions here
+template <typename T, typename PComparator>
+Heap<T,PComparator>::Heap(int m, PComparator c):
+m_(m), c_(c)
+{}
+
 
 
 // We will start top() for you to handle the case of 
@@ -81,14 +90,11 @@ T const & Heap<T,PComparator>::top() const
     // ================================
     // throw the appropriate exception
     // ================================
-
-
+    throw(std::underflow_error("Empty Heap"));
   }
   // If we get here we know the heap has at least 1 item
   // Add code to return the top element
-
-
-
+  return arr_[0];
 }
 
 
@@ -101,15 +107,70 @@ void Heap<T,PComparator>::pop()
     // ================================
     // throw the appropriate exception
     // ================================
-
-
+  throw(std::underflow_error("Empty Heap"));
   }
-
-
-
+  swap(arr_[0], arr_[arr_.size() - 1]);
+  arr_.pop_back();
+  bool end = true;
+//trickle down
+  int i = 0;
+  while(m_*i + m_ < size()){
+    int best = i;
+    for(int j = 1; j <= m_; j++){
+      if(!c_(arr_[best], arr_[i*m_ + j])){
+        best = i*m_ + j;
+      }
+    }
+    if(best != i){
+      swap(arr_[best], arr_[i]);
+      i = best;
+    }
+    else{
+      end = false;
+      break;
+    }
+  }
+  //if tree is incomplete
+  int s = static_cast<int>(size());
+  if(s - 1 - i*m_ > 0 && end){
+    int best = i;
+    for(int j = 1; j <= s - 1 - i*m_; j++){
+      if(!c_(arr_[best], arr_[i*m_ + j])){
+        best = i*m_ + j;
+      }
+    }
+    if(best != i){
+      swap(arr_[best], arr_[i]);
+      i = best;
+    }
+  }
 }
 
+template <typename T, typename PComparator>
+size_t Heap<T, PComparator>::size() const{
+  return arr_.std::vector<T>::size();
+}
 
+template <typename T, typename PComparator>
+bool Heap<T,PComparator>::empty() const{
+  return size() == 0;
+}
 
+template <typename T, typename PComparator>
+void Heap<T, PComparator>::push(const T& item){
+  arr_.push_back(item);
+
+  //trickle up
+  size_t index = size() - 1;
+  while(index > 0){
+    size_t parent = (index - 1)/m_;
+    if(c_(arr_[index], arr_[parent])){
+      swap(arr_[index], arr_[parent]);
+      index = parent;
+    }
+    else{break;}
+  }
+
+}
 #endif
 
