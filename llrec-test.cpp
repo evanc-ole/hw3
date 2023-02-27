@@ -92,30 +92,18 @@ int main(int argc, char* argv[])
     oddfunc f;
     // Test out your linked list code
     Heap<int, oddfunc> h(2, f);
-    while(head){
-        h.push(head->val);
-        head = head->next;
+		Node* temp = head;
+    while(temp){
+        h.push(temp->val);
+        temp = temp->next;
     }
     
 
     while(!h.empty()){
-        //cout << h.top() << " ";
-        int m = 0;
-        int n = 1;
-        for(int i = 0; i < h.arr_.size(); i++){
-            if(i == m){
-                cout << h.arr_[i] << endl;
-                m += n*2;
-                n *= 2;
-            }
-            else{
-                cout << h.arr_[i] << " ";
-            }
-        }
-        cout << endl;
+        cout << h.top() << " ";
         h.pop();
     }
-
+		dealloc(head);
 
     
     return 0;
