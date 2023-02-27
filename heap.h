@@ -3,9 +3,7 @@
 #include <functional>
 #include <stdexcept>
 #include <vector>
-#include <iostream>
 
-using namespace std;
 template <typename T, typename PComparator = std::less<T> >
 class Heap
 {
@@ -60,11 +58,11 @@ public:
    * @brief Returns size of the heap
    * 
    */
-  size_t size() const;
-std::vector<T> arr_;
+  std::size_t size() const;
+
 private:
   /// Add whatever helper functions and data members you need below
-  
+  std::vector<T> arr_;
   int m_;
   PComparator c_;
 
@@ -109,7 +107,7 @@ void Heap<T,PComparator>::pop()
     // ================================
   throw(std::underflow_error("Empty Heap"));
   }
-  swap(arr_[0], arr_[arr_.size() - 1]);
+  std::swap(arr_[0], arr_[arr_.size() - 1]);
   arr_.pop_back();
   bool end = true;
 //trickle down
@@ -122,7 +120,7 @@ void Heap<T,PComparator>::pop()
       }
     }
     if(best != i){
-      swap(arr_[best], arr_[i]);
+      std::swap(arr_[best], arr_[i]);
       i = best;
     }
     else{
@@ -140,7 +138,7 @@ void Heap<T,PComparator>::pop()
       }
     }
     if(best != i){
-      swap(arr_[best], arr_[i]);
+      std::swap(arr_[best], arr_[i]);
       i = best;
     }
   }
@@ -161,11 +159,11 @@ void Heap<T, PComparator>::push(const T& item){
   arr_.push_back(item);
 
   //trickle up
-  size_t index = size() - 1;
+  std::size_t index = size() - 1;
   while(index > 0){
-    size_t parent = (index - 1)/m_;
+    std::size_t parent = (index - 1)/m_;
     if(c_(arr_[index], arr_[parent])){
-      swap(arr_[index], arr_[parent]);
+      std::swap(arr_[index], arr_[parent]);
       index = parent;
     }
     else{break;}
